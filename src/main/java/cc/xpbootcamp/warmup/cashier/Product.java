@@ -6,7 +6,6 @@ public class Product {
 	private int quantity;
 
 	public Product(String desc, double price, int quantity) {
-		super();
 		this.desc = desc;
 		this.price = price;
 		this.quantity = quantity;
