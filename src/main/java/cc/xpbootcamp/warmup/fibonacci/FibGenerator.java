@@ -6,20 +6,17 @@ public class FibGenerator {
     private static final long F1 = 1;
 
     public long calculate(long position) {
-        if (position < 1) {
+        if (position < BEGIN_POSITION) {
             throw new GivenPositionIsNegativeException();
         }
-        long temp0 = F0;
-        long temp1 = F1;
-        long result = temp1;
-        long index = BEGIN_POSITION;
-        while (index < position) {
-            result = temp0 + temp1;
-            temp0 = temp1;
-            temp1 = result;
-            index++;
+        return fibIter(F1, F0, position);
+    }
+
+    private long fibIter(long f1, long f0, long counter) {
+        if (counter == 0) {
+            return f0;
         }
-        return result;
+        return fibIter(f1 + f0, f1, counter - 1);
     }
 
 }
