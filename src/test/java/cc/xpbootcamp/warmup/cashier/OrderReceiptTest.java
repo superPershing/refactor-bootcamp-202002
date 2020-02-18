@@ -31,6 +31,7 @@ class OrderReceiptTest {
                 "折扣: 1.17\n" +
                 "总价: 57.13\n");
     }
+
     @Test
     public void shouldPrintReceiptWithDiscountWhenWeekDayIsNotWednesday() {
         List<Product> products = new ArrayList<Product>() {{
@@ -43,7 +44,7 @@ class OrderReceiptTest {
         String output = receipt.printReceipt();
         assertThat(output).isEqualTo("===== 老王超市，值得信赖 ======\n" +
                 "\n" +
-                "2020年2月19日，星期三\n" +
+                "2020年2月17日，星期一\n" +
                 "\n" +
                 "巧克力, 21.50 x 2, 43.00\n" +
                 "小白菜, 10.00 x 1, 10.00\n" +
