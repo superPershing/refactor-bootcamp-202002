@@ -26,8 +26,8 @@ public class OrderReceipt {
         buildCustomerInfo();
         buildProductsInfo();
         calculateTaxAndCost();
-        buildSalesTaxInfo(totalSalesTax);
-        buildTotalAmountInfo(totalCost);
+        buildSalesTaxInfo();
+        buildTotalAmountInfo();
 
         return receiptInfo.toString();
     }
@@ -67,11 +67,11 @@ public class OrderReceipt {
         receiptInfo.append('\n');
     }
 
-    private void buildSalesTaxInfo(double totalSalesTax) {
+    private void buildSalesTaxInfo() {
         receiptInfo.append("Sales Tax").append('\t').append(totalSalesTax);
     }
 
-    private void buildTotalAmountInfo(double totalCost) {
+    private void buildTotalAmountInfo() {
         receiptInfo.append("Total Amount").append('\t').append(totalCost);
     }
 
