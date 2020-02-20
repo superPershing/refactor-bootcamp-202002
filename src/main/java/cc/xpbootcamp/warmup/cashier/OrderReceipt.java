@@ -5,6 +5,7 @@ import java.math.RoundingMode;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.util.HashMap;
+import java.util.stream.Collectors;
 
 public class OrderReceipt {
     public static final double SALES_TAX_RATE = .10;
@@ -12,56 +13,52 @@ public class OrderReceipt {
     public static final double DISCOUNT_RATE = 0.02;
 
     private Order order;
-    private StringBuilder receiptInfo;
     private BigDecimal totalSalesTax;
     private BigDecimal discountCost;
     private BigDecimal totalCost;
 
     public OrderReceipt(Order order) {
         this.order = order;
-        receiptInfo = new StringBuilder();
         totalSalesTax = BigDecimal.ZERO;
         totalCost = BigDecimal.ZERO;
         discountCost = BigDecimal.ZERO;
     }
 
     public String printReceipt() {
-        buildHeaders();
-        buildBlankLine();
-        buildDateInfo();
-        buildBlankLine();
-        buildProductsInfo();
-        buildSeparateLine();
+        StringBuilder receiptInfo = new StringBuilder();
+        receiptInfo.append(buildHeaders());
+        receiptInfo.append(buildBlankLine());
+        receiptInfo.append(buildDateInfo());
+        receiptInfo.append(buildBlankLine());
+        receiptInfo.append(buildProductsInfo());
+        receiptInfo.append(buildSeparateLine());
         calculateTaxAndDiscountAndCost();
-        buildSalesTaxInfo();
-        buildDiscountInfo();
-        buildTotalAmountInfo();
+        receiptInfo.append(buildSalesTaxInfo());
+        receiptInfo.append(buildDiscountInfo());
+        receiptInfo.append(buildTotalAmountInfo());
 
         return receiptInfo.toString();
     }
 
-    private void buildHeaders() {
-        receiptInfo.append("===== 老王超市，值得信赖 ======\n");
+    private String buildHeaders() {
+        return "===== 老王超市，值得信赖 ======\n";
     }
 
-    private void buildBlankLine() {
-        receiptInfo.append('\n');
+    private String buildBlankLine() {
+        return "\n";
     }
 
-    private void buildDateInfo() {
+    private String buildDateInfo() {
         LocalDate orderDate = order.getDate();
-        receiptInfo.append(orderDate.getYear()).append("年")
-                .append(orderDate.getMonthValue()).append("月")
-                .append(orderDate.getDayOfMonth()).append("日，")
-                .append(WeekDay.fromDay(orderDate.getDayOfWeek()).getDesc()).append("\n");
+        return String.format("%d年%d月%d日，%s%n", orderDate.getYear(), orderDate.getMonthValue(), orderDate.getDayOfMonth(), WeekDay.fromDay(orderDate.getDayOfWeek()).getDesc());
     }
 
-    private void buildProductsInfo() {
-        order.getLineItems().forEach(this::buildProductInfo);
+    private String buildProductsInfo() {
+        return order.getLineItems().stream().map(this::buildProductInfo).collect(Collectors.joining());
     }
 
-    private void buildSeparateLine() {
-        receiptInfo.append("-----------------------------------\n");
+    private String buildSeparateLine() {
+        return "-----------------------------------\n";
     }
 
     private void calculateTaxAndDiscountAndCost() {
@@ -83,29 +80,23 @@ public class OrderReceipt {
         totalCost = totalCost.add(calculateTotalCostWithSalesTax(lineItem, productSalesTax));
     }
 
-    private void buildProductInfo(LineItem lineItem) {
-        receiptInfo.append(lineItem.getDescription());
-        receiptInfo.append(", ");
-        receiptInfo.append(lineItem.getPrice().setScale(AMOUNT_SCALE, RoundingMode.HALF_UP));
-        receiptInfo.append(" x ");
-        receiptInfo.append(lineItem.getQuantity());
-        receiptInfo.append(", ");
-        receiptInfo.append(lineItem.totalAmount().setScale(AMOUNT_SCALE, RoundingMode.HALF_UP));
-        receiptInfo.append('\n');
+    private String buildProductInfo(LineItem lineItem) {
+        return String.format("%s, %s x %d, %s%n", lineItem.getDescription(), lineItem.getPrice().setScale(AMOUNT_SCALE, RoundingMode.HALF_UP), lineItem.getQuantity(), lineItem.totalAmount().setScale(AMOUNT_SCALE, RoundingMode.HALF_UP));
     }
 
-    private void buildSalesTaxInfo() {
-        receiptInfo.append("税额: ").append(totalSalesTax.setScale(AMOUNT_SCALE, RoundingMode.HALF_UP)).append("\n");
+    private String buildSalesTaxInfo() {
+        return String.format("税额: %s%n", totalSalesTax.setScale(AMOUNT_SCALE, RoundingMode.HALF_UP));
     }
 
-    private void buildDiscountInfo() {
+    private String buildDiscountInfo() {
         if (isDiscountDay()) {
-            receiptInfo.append("折扣: ").append(discountCost.setScale(AMOUNT_SCALE, RoundingMode.HALF_UP)).append("\n");
+            return String.format("折扣: %s%n", discountCost.setScale(AMOUNT_SCALE, RoundingMode.HALF_UP));
         }
+        return "";
     }
 
-    private void buildTotalAmountInfo() {
-        receiptInfo.append("总价: ").append(totalCost.setScale(AMOUNT_SCALE, RoundingMode.HALF_UP)).append("\n");
+    private String buildTotalAmountInfo() {
+        return String.format("总价: %s%n", totalCost.setScale(AMOUNT_SCALE, RoundingMode.HALF_UP));
     }
 
     private BigDecimal calculateTotalCostWithSalesTax(LineItem lineItem, BigDecimal salesTax) {
