@@ -19,9 +19,9 @@ public class OrderReceipt {
 
     public OrderReceipt(Order order) {
         this.order = order;
-        totalSalesTax = BigDecimal.ZERO;
-        totalCost = BigDecimal.ZERO;
-        discountCost = BigDecimal.ZERO;
+        this.totalSalesTax = BigDecimal.ZERO;
+        this.totalCost = BigDecimal.ZERO;
+        this.discountCost = BigDecimal.ZERO;
     }
 
     public String printReceipt() {
