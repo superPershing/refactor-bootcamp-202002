@@ -6,13 +6,13 @@ import java.util.List;
 public class Order {
     private String customerName;
     private String customerAddress;
-    private List<Product> products;
+    private List<LineItem> lineItems;
     private LocalDate date;
 
-    public Order(String customerName, String customerAddress, List<Product> products, LocalDate date) {
+    public Order(String customerName, String customerAddress, List<LineItem> lineItems, LocalDate date) {
         this.customerName = customerName;
         this.customerAddress = customerAddress;
-        this.products = products;
+        this.lineItems = lineItems;
         this.date = date;
     }
 
@@ -24,8 +24,8 @@ public class Order {
         return customerAddress;
     }
 
-    public List<Product> getProducts() {
-        return products;
+    public List<LineItem> getLineItems() {
+        return lineItems;
     }
 
     public LocalDate getDate() {

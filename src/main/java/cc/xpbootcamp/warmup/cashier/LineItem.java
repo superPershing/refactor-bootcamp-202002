@@ -2,12 +2,12 @@ package cc.xpbootcamp.warmup.cashier;
 
 import java.math.BigDecimal;
 
-public class Product {
+public class LineItem {
     private String desc;
     private BigDecimal price;
     private int quantity;
 
-    public Product(String desc, double price, int quantity) {
+    public LineItem(String desc, double price, int quantity) {
         this.desc = desc;
         this.price = BigDecimal.valueOf(price);
         this.quantity = quantity;

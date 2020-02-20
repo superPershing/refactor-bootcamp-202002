@@ -12,12 +12,12 @@ class OrderReceiptTest {
 
     @Test
     public void shouldPrintReceiptWithDiscountWhenWeekDayIsWednesday() {
-        List<Product> products = new ArrayList<Product>() {{
-            add(new Product("巧克力", 21.50, 2));
-            add(new Product("小白菜", 10.00, 1));
+        List<LineItem> lineItems = new ArrayList<LineItem>() {{
+            add(new LineItem("巧克力", 21.50, 2));
+            add(new LineItem("小白菜", 10.00, 1));
         }};
         LocalDate date = LocalDate.of(2020, 2, 19);
-        OrderReceipt receipt = new OrderReceipt(new Order(null, null, products, date));
+        OrderReceipt receipt = new OrderReceipt(new Order(null, null, lineItems, date));
 
         String output = receipt.printReceipt();
         assertThat(output).isEqualTo("===== 老王超市，值得信赖 ======\n" +
@@ -34,12 +34,12 @@ class OrderReceiptTest {
 
     @Test
     public void shouldPrintReceiptWithDiscountWhenWeekDayIsNotWednesday() {
-        List<Product> products = new ArrayList<Product>() {{
-            add(new Product("巧克力", 21.50, 2));
-            add(new Product("小白菜", 10.00, 1));
+        List<LineItem> lineItems = new ArrayList<LineItem>() {{
+            add(new LineItem("巧克力", 21.50, 2));
+            add(new LineItem("小白菜", 10.00, 1));
         }};
         LocalDate date = LocalDate.of(2020, 2, 17);
-        OrderReceipt receipt = new OrderReceipt(new Order(null, null, products, date));
+        OrderReceipt receipt = new OrderReceipt(new Order(null, null, lineItems, date));
 
         String output = receipt.printReceipt();
         assertThat(output).isEqualTo("===== 老王超市，值得信赖 ======\n" +

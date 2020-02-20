@@ -3,6 +3,7 @@ package cc.xpbootcamp.warmup.cashier;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.DayOfWeek;
+import java.time.LocalDate;
 import java.util.HashMap;
 
 public class OrderReceipt {
@@ -48,14 +49,15 @@ public class OrderReceipt {
     }
 
     private void buildDateInfo() {
-        receiptInfo.append(order.getDate().getYear()).append("年")
-                .append(order.getDate().getMonthValue()).append("月")
-                .append(order.getDate().getDayOfMonth()).append("日，")
-                .append(WeekDay.fromDay(order.getDate().getDayOfWeek()).getDesc()).append("\n");
+        LocalDate orderDate = order.getDate();
+        receiptInfo.append(orderDate.getYear()).append("年")
+                .append(orderDate.getMonthValue()).append("月")
+                .append(orderDate.getDayOfMonth()).append("日，")
+                .append(WeekDay.fromDay(orderDate.getDayOfWeek()).getDesc()).append("\n");
     }
 
     private void buildProductsInfo() {
-        order.getProducts().forEach(this::buildProductInfo);
+        order.getLineItems().forEach(this::buildProductInfo);
     }
 
     private void buildSeparateLine() {
@@ -63,7 +65,7 @@ public class OrderReceipt {
     }
 
     private void calculateTaxAndDiscountAndCost() {
-        order.getProducts().forEach(this::updateTotalSalesTaxAndTotalCostWith);
+        order.getLineItems().forEach(this::updateTotalSalesTaxAndTotalCostWith);
         if (isDiscountDay()) {
             discountCost = totalCost.multiply(BigDecimal.valueOf(DISCOUNT_RATE));
             totalCost = totalCost.subtract(discountCost);
@@ -74,21 +76,21 @@ public class OrderReceipt {
         return order.getDate().getDayOfWeek() == DayOfWeek.WEDNESDAY;
     }
 
-    private void updateTotalSalesTaxAndTotalCostWith(Product product) {
-        BigDecimal productSalesTax = calculateProductSalesTax(product);
+    private void updateTotalSalesTaxAndTotalCostWith(LineItem lineItem) {
+        BigDecimal productSalesTax = calculateProductSalesTax(lineItem);
 
         totalSalesTax = totalSalesTax.add(productSalesTax);
-        totalCost = totalCost.add(calculateTotalCostWithSalesTax(product, productSalesTax));
+        totalCost = totalCost.add(calculateTotalCostWithSalesTax(lineItem, productSalesTax));
     }
 
-    private void buildProductInfo(Product product) {
-        receiptInfo.append(product.getDescription());
+    private void buildProductInfo(LineItem lineItem) {
+        receiptInfo.append(lineItem.getDescription());
         receiptInfo.append(", ");
-        receiptInfo.append(product.getPrice().setScale(AMOUNT_SCALE, RoundingMode.HALF_UP));
+        receiptInfo.append(lineItem.getPrice().setScale(AMOUNT_SCALE, RoundingMode.HALF_UP));
         receiptInfo.append(" x ");
-        receiptInfo.append(product.getQuantity());
+        receiptInfo.append(lineItem.getQuantity());
         receiptInfo.append(", ");
-        receiptInfo.append(product.totalAmount().setScale(AMOUNT_SCALE, RoundingMode.HALF_UP));
+        receiptInfo.append(lineItem.totalAmount().setScale(AMOUNT_SCALE, RoundingMode.HALF_UP));
         receiptInfo.append('\n');
     }
 
@@ -106,12 +108,12 @@ public class OrderReceipt {
         receiptInfo.append("总价: ").append(totalCost.setScale(AMOUNT_SCALE, RoundingMode.HALF_UP)).append("\n");
     }
 
-    private BigDecimal calculateTotalCostWithSalesTax(Product product, BigDecimal salesTax) {
-        return product.totalAmount().add(salesTax);
+    private BigDecimal calculateTotalCostWithSalesTax(LineItem lineItem, BigDecimal salesTax) {
+        return lineItem.totalAmount().add(salesTax);
     }
 
-    private BigDecimal calculateProductSalesTax(Product product) {
-        return product.totalAmount().multiply(BigDecimal.valueOf(SALES_TAX_RATE));
+    private BigDecimal calculateProductSalesTax(LineItem lineItem) {
+        return lineItem.totalAmount().multiply(BigDecimal.valueOf(SALES_TAX_RATE));
     }
 
     public enum WeekDay {
