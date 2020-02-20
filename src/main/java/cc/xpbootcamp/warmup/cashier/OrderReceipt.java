@@ -11,6 +11,7 @@ public class OrderReceipt {
     public static final double SALES_TAX_RATE = .10;
     public static final int AMOUNT_SCALE = 2;
     public static final double DISCOUNT_RATE = 0.02;
+    public static final DayOfWeek DISCOUNT_DAY = DayOfWeek.WEDNESDAY;
 
     private Order order;
     private BigDecimal totalSalesTax;
@@ -70,7 +71,7 @@ public class OrderReceipt {
     }
 
     private boolean isDiscountDay() {
-        return order.getDate().getDayOfWeek() == DayOfWeek.WEDNESDAY;
+        return order.getDate().getDayOfWeek() == DISCOUNT_DAY;
     }
 
     private void updateTotalSalesTaxAndTotalCostWith(LineItem lineItem) {
