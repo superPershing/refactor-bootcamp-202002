@@ -4,24 +4,12 @@ import java.time.LocalDate;
 import java.util.List;
 
 public class Order {
-    private String customerName;
-    private String customerAddress;
     private List<LineItem> lineItems;
     private LocalDate date;
 
-    public Order(String customerName, String customerAddress, List<LineItem> lineItems, LocalDate date) {
-        this.customerName = customerName;
-        this.customerAddress = customerAddress;
+    public Order(List<LineItem> lineItems, LocalDate date) {
         this.lineItems = lineItems;
         this.date = date;
-    }
-
-    public String getCustomerName() {
-        return customerName;
-    }
-
-    public String getCustomerAddress() {
-        return customerAddress;
     }
 
     public List<LineItem> getLineItems() {

@@ -17,7 +17,7 @@ class OrderReceiptTest {
             add(new LineItem("小白菜", 10.00, 1));
         }};
         LocalDate date = LocalDate.of(2020, 2, 19);
-        OrderReceipt receipt = new OrderReceipt(new Order(null, null, lineItems, date));
+        OrderReceipt receipt = new OrderReceipt(new Order(lineItems, date));
 
         String output = receipt.printReceipt();
         assertThat(output).isEqualTo("===== 老王超市，值得信赖 ======\n" +
@@ -39,7 +39,7 @@ class OrderReceiptTest {
             add(new LineItem("小白菜", 10.00, 1));
         }};
         LocalDate date = LocalDate.of(2020, 2, 17);
-        OrderReceipt receipt = new OrderReceipt(new Order(null, null, lineItems, date));
+        OrderReceipt receipt = new OrderReceipt(new Order(lineItems, date));
 
         String output = receipt.printReceipt();
         assertThat(output).isEqualTo("===== 老王超市，值得信赖 ======\n" +
