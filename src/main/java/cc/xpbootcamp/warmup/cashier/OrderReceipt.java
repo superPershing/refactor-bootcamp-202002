@@ -8,6 +8,7 @@ import java.util.stream.Collectors;
 
 public class OrderReceipt {
     public static final int AMOUNT_SCALE = 2;
+    public static final String SEPARATE_LINE = "-----------------------------------\n";
 
     private Order order;
 
@@ -17,22 +18,22 @@ public class OrderReceipt {
 
     public String printReceipt() {
         return buildHeaders() +
-                buildBlankLine() +
+                "\n" +
                 buildDateInfo() +
-                buildBlankLine() +
+                "\n" +
                 buildProductsInfo() +
-                buildSeparateLine() +
-                buildSalesTaxInfo() +
+                SEPARATE_LINE +
+                buildPriceInfo();
+    }
+
+    private String buildPriceInfo() {
+        return buildSalesTaxInfo() +
                 buildDiscountInfo() +
                 buildTotalAmountInfo();
     }
 
     private String buildHeaders() {
         return "===== 老王超市，值得信赖 ======\n";
-    }
-
-    private String buildBlankLine() {
-        return "\n";
     }
 
     private String buildDateInfo() {
@@ -42,10 +43,6 @@ public class OrderReceipt {
 
     private String buildProductsInfo() {
         return order.getLineItems().stream().map(this::buildProductInfo).collect(Collectors.joining());
-    }
-
-    private String buildSeparateLine() {
-        return "-----------------------------------\n";
     }
 
     private String buildProductInfo(LineItem lineItem) {
