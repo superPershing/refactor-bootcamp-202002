@@ -16,18 +16,15 @@ public class OrderReceipt {
     }
 
     public String printReceipt() {
-        StringBuilder receiptInfo = new StringBuilder();
-        receiptInfo.append(buildHeaders());
-        receiptInfo.append(buildBlankLine());
-        receiptInfo.append(buildDateInfo());
-        receiptInfo.append(buildBlankLine());
-        receiptInfo.append(buildProductsInfo());
-        receiptInfo.append(buildSeparateLine());
-        receiptInfo.append(buildSalesTaxInfo());
-        receiptInfo.append(buildDiscountInfo());
-        receiptInfo.append(buildTotalAmountInfo());
-
-        return receiptInfo.toString();
+        return buildHeaders() +
+                buildBlankLine() +
+                buildDateInfo() +
+                buildBlankLine() +
+                buildProductsInfo() +
+                buildSeparateLine() +
+                buildSalesTaxInfo() +
+                buildDiscountInfo() +
+                buildTotalAmountInfo();
     }
 
     private String buildHeaders() {
