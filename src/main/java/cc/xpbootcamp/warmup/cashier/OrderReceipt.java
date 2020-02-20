@@ -38,7 +38,8 @@ public class OrderReceipt {
 
     private String buildDateInfo() {
         LocalDate orderDate = order.getPurchasedDate();
-        return String.format("%s%n", DateTimeFormatter.ofPattern("yyyy年M月dd日，EEEE", Locale.CHINA).format(orderDate));
+        return String.format("%s%n",
+                DateTimeFormatter.ofPattern("yyyy年M月dd日，EEEE", Locale.CHINA).format(orderDate));
     }
 
     private String buildProductsInfo() {
@@ -46,7 +47,11 @@ public class OrderReceipt {
     }
 
     private String buildProductInfo(LineItem lineItem) {
-        return String.format("%s, %s x %d, %s%n", lineItem.getDescription(), lineItem.getPrice().setScale(AMOUNT_SCALE, RoundingMode.HALF_UP), lineItem.getQuantity(), lineItem.totalAmount().setScale(AMOUNT_SCALE, RoundingMode.HALF_UP));
+        return String.format("%s, %s x %d, %s%n",
+                lineItem.getDescription(),
+                lineItem.getPrice().setScale(AMOUNT_SCALE, RoundingMode.HALF_UP),
+                lineItem.getQuantity(),
+                lineItem.totalAmount().setScale(AMOUNT_SCALE, RoundingMode.HALF_UP));
     }
 
     private String buildSalesTaxInfo() {
