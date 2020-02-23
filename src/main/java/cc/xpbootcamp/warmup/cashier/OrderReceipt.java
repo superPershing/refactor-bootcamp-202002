@@ -19,14 +19,14 @@ public class OrderReceipt {
     public String printReceipt() {
         return buildHeaders() +
                 "\n" +
-                buildDateInfo() +
+                buildDate() +
                 "\n" +
-                buildProductsInfo() +
+                buildLineItems() +
                 SEPARATE_LINE +
-                buildPriceInfo();
+                buildPrice();
     }
 
-    private String buildPriceInfo() {
+    private String buildPrice() {
         return buildSalesTaxInfo() +
                 buildDiscountInfo() +
                 buildTotalAmountInfo();
@@ -36,13 +36,13 @@ public class OrderReceipt {
         return "===== 老王超市，值得信赖 ======\n";
     }
 
-    private String buildDateInfo() {
+    private String buildDate() {
         LocalDate orderDate = order.getPurchasedDate();
         return String.format("%s%n",
                 DateTimeFormatter.ofPattern("yyyy年M月dd日，EEEE", Locale.CHINA).format(orderDate));
     }
 
-    private String buildProductsInfo() {
+    private String buildLineItems() {
         return order.getLineItems().stream().map(this::buildProductInfo).collect(Collectors.joining());
     }
 

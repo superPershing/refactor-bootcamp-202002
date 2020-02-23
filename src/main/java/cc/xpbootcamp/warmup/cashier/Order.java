@@ -26,10 +26,6 @@ public class Order {
         calculateTaxAndDiscountAndCost();
     }
 
-    public static BigDecimal calculateSalesTax(BigDecimal amount, BigDecimal salesTax) {
-        return amount.multiply(salesTax);
-    }
-
     public List<LineItem> getLineItems() {
         return lineItems;
     }
@@ -74,5 +70,9 @@ public class Order {
 
     public boolean isDiscountDay() {
         return purchasedDate.getDayOfWeek() == DISCOUNT_DAY;
+    }
+
+    public static BigDecimal calculateSalesTax(BigDecimal amount, BigDecimal salesTax) {
+        return amount.multiply(salesTax);
     }
 }
