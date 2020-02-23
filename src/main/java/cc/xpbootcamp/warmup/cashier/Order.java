@@ -26,6 +26,10 @@ public class Order {
         calculateTaxAndDiscountAndCost();
     }
 
+    public static BigDecimal calculateSalesTax(BigDecimal amount, BigDecimal salesTax) {
+        return amount.multiply(salesTax);
+    }
+
     public List<LineItem> getLineItems() {
         return lineItems;
     }
@@ -47,29 +51,28 @@ public class Order {
     }
 
     private void calculateTaxAndDiscountAndCost() {
-        lineItems.forEach(this::updateTotalSalesTaxAndTotalCostWith);
+        calculateTotalCostWithoutDiscountAndTax();
+        calculateTax();
+        calculateDiscount();
+    }
+
+    private void calculateTotalCostWithoutDiscountAndTax() {
+        totalCost = lineItems.stream().map(LineItem::totalAmount).reduce(BigDecimal.ZERO, BigDecimal::add);
+    }
+
+    private void calculateTax() {
+        totalSalesTax = calculateSalesTax(totalCost, BigDecimal.valueOf(SALES_TAX_RATE));
+        totalCost = totalCost.add(totalSalesTax);
+    }
+
+    private void calculateDiscount() {
         if (isDiscountDay()) {
             discountCost = totalCost.multiply(BigDecimal.valueOf(DISCOUNT_RATE));
-            totalCost = totalCost.subtract(discountCost);
         }
+        totalCost = totalCost.subtract(discountCost);
     }
 
     public boolean isDiscountDay() {
         return purchasedDate.getDayOfWeek() == DISCOUNT_DAY;
-    }
-
-    private void updateTotalSalesTaxAndTotalCostWith(LineItem lineItem) {
-        BigDecimal productSalesTax = calculateProductSalesTax(lineItem);
-
-        totalSalesTax = totalSalesTax.add(productSalesTax);
-        totalCost = totalCost.add(calculateTotalCostWithSalesTax(lineItem, productSalesTax));
-    }
-
-    private BigDecimal calculateTotalCostWithSalesTax(LineItem lineItem, BigDecimal salesTax) {
-        return lineItem.totalAmount().add(salesTax);
-    }
-
-    private BigDecimal calculateProductSalesTax(LineItem lineItem) {
-        return lineItem.totalAmount().multiply(BigDecimal.valueOf(SALES_TAX_RATE));
     }
 }
